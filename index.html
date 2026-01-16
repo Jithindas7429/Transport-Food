@@ -13,17 +13,18 @@
     </style>
 </head>
 <body>
-    
     <iframe src="https://script.google.com/macros/s/AKfycbwpaXjVKwhuJ0YcpoT5531CvxfevHrPcHqUlKuwwkMOZsTj1-zVlljdeYZ1r2SuURky/exec"></iframe>
 
     <script>
         let deferredPrompt;
 
+        // Install prompt pidichedukkunnu
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             console.log("Install prompt captured");
 
+            // 5 second kazhiyumpol prompt kanikkunnu
             setTimeout(() => {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
@@ -31,12 +32,12 @@
                         deferredPrompt = null;
                     });
                 }
-            }, 5000); // 5 സെക്കന്റ് കാത്തിരിക്കുന്നു
+            }, 5000); 
         });
 
+        // Service Worker (Mandatory for Install Popup)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                // Inline Service Worker
                 const swCode = "self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => e.waitUntil(clients.claim())); self.addEventListener('fetch', e => e);";
                 const blob = new Blob([swCode], {type: 'text/javascript'});
                 const url = URL.createObjectURL(blob);
