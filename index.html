@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Portal</title>
     
-    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIkVtcGxveWVlIFBvcnRhbCIsCiAgInNob3J0X25hbWUiOiAiUG9ydGFsIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTBlMWEiLAogICJ0aGVtZV9jb2xvciI6ICIjMzMwMGNjIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvMTgyNy8xODI3MzQ3LnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ==">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Employee Portal","short_name":"Portal","start_url":"/Transport-Food/","display":"standalone","background_color":"#0a0e1a","theme_color":"#3300cc","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/1827/1827347.png","sizes":"512x512","type":"image/png"}]}'>
 
     <style>
         body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #0a0e1a; }
@@ -19,30 +19,28 @@
     <script>
         let deferredPrompt;
 
-        // 2. ഇൻസ്റ്റാൾ പോപ്പ്-അപ്പ് കാണിക്കാനുള്ള ലോജിക്
         window.addEventListener('beforeinstallprompt', (e) => {
-            // ബ്രൗസറിന്റെ ഡിഫോൾട്ട് രീതി തടയുന്നു
             e.preventDefault();
             deferredPrompt = e;
+            console.log("Install prompt captured");
 
-            // യൂസർ ലിങ്ക് തുറന്ന് 3 സെക്കന്റിന് ശേഷം പോപ്പ്-അപ്പ് കാണിക്കുന്നു
             setTimeout(() => {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the install prompt');
-                        }
                         deferredPrompt = null;
                     });
                 }
-            }, 3000); 
+            }, 5000); // 5 സെക്കന്റ് കാത്തിരിക്കുന്നു
         });
 
-        // 3. സർവീസ് വർക്കർ രജിസ്റ്റർ ചെയ്യുന്നു (ഇൻസ്റ്റാൾ ചെയ്യാൻ ഇത് നിർബന്ധമാണ്)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4gewogIHNlbGYuc2tpcFdhaXRpbmcoKTsKfSk7CnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignYWN0aXZhdGUnLCBldmVudCA9PiB7CiAgc2VsZi5jbGllbnRzLmNsYWltKCk7Cn0pOw==');
+                // Inline Service Worker
+                const swCode = "self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => e.waitUntil(clients.claim())); self.addEventListener('fetch', e => e);";
+                const blob = new Blob([swCode], {type: 'text/javascript'});
+                const url = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(url);
             });
         }
     </script>
