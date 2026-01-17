@@ -1,0 +1,15 @@
+{
+  "name": "Employee Portal",
+  "short_name": "EmpPortal",
+  "start_url": "https://jithindas7429.github.io/Transport-Food/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#1a2a6c",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
