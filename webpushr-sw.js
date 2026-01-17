@@ -1,1 +1,1 @@
-importScripts('https://cdn.webpushr.com/sw-server.min.js');
+importScripts("https://cdn.pushalert.co/sw-87210.js");
