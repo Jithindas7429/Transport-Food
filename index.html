@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Portal</title>
     
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Employee Portal","short_name":"Portal","start_url":"/Transport-Food/","display":"standalone","background_color":"#0a0e1a","theme_color":"#3300cc","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/1827/1827347.png","sizes":"512x512","type":"image/png"}]}'>
+    <link rel="manifest" href="manifest.json">
 
     <style>
         body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #0a0e1a; }
@@ -18,49 +18,28 @@
     <script>
         let deferredPrompt;
 
-        // Install prompt pidichedukkunnu
+        // Install prompt ക്യാപ്‌ചർ ചെയ്യുന്നു
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             console.log("Install prompt captured");
 
-            // 5 second kazhiyumpol prompt kanikkunnu
+            // 3 സെക്കൻഡ് കഴിഞ്ഞാൽ ഇൻസ്റ്റാൾ ചെയ്യാൻ ചോദിക്കും
             setTimeout(() => {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        deferredPrompt = null;
-                    });
                 }
-            }, 5000); 
+            }, 3000); 
         });
 
-        // Service Worker (Mandatory for Install Popup)
+        // Service Worker രജിസ്‌ട്രേഷൻ (sw.js എന്ന ഫയൽ ആവശ്യമാണ്)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                const swCode = "self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => e.waitUntil(clients.claim())); self.addEventListener('fetch', e => e);";
-                const blob = new Blob([swCode], {type: 'text/javascript'});
-                const url = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(url);
+                navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker Registered'))
+                .catch(err => console.log('Service Worker Failed', err));
             });
         }
     </script>
 </body>
 </html>
-
-{
-  "name": "Employee Portal",
-  "short_name": "Portal",
-  "start_url": "/Transport-Food/",
-  "display": "standalone",
-  "background_color": "#0a0e1a",
-  "theme_color": "#3300cc",
-  "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/1827/1827347.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
-
